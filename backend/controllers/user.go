@@ -21,9 +21,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(req.Username)
-	fmt.Println(req.Password)
-
 	user, err := models.FindUserbyUsername(req.Username)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
@@ -32,7 +29,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if user.Password != req.Password {
+	if !(models.CheckPasswordHash(req.Password, user.Password)) {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "incorrect password",
 		})
@@ -80,7 +77,8 @@ func Register(c *gin.Context) {
 	)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "incorrect parameters",
+			"error":   "incorrect parameters",
+			"details": err.Error(),
 		})
 		return
 	}
