@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+{{ user.username }}
+{% endblock %}
+
+{% block content %}
+    <style>
+        #main {
+            min-height: 99vh;
+        }
+    </style>
+<div class="container d-flex align-items-center" id="main">
+    <div>
+        <h1 class="display-1 mb-5"><strong>{{ user.username }} | Profile</strong></h1>
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Phone Number:</strong> {{ user.profile.phone_number }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Location:</strong> {{ user.profile.location }}</p>
+    </div>
+
+</div>
+{% endblock %}
