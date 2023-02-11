@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search
+{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center mt-5 mb-2">
+      <form method="get" class="py-5 mx-auto px-auto">
+            <h1 class="display-4">Search</h1>
+            <div class="row g-3 align-items-center">
+              <div class="col-auto">
+                <input type="text" name="q" value="{{ request.GET.q }}" class="form-control" aria-describedby="passwordHelpInline">
+              </div>
+              <div class="col-auto">
+                <span id="passwordHelpInline" class="form-text">
+                  <button type="submit" class="btn btn-outline-success px-3 py-1">Search</button>
+                </span>
+              </div>
+            </div>
+      </form>
+</div>
+
+<div class="container">
+    {% if request.GET.q %}
+        <ul class="list-group">
+            {% for x in posts %}
+                <li class="list-group-item bg-success">
+                    <a href="{% url 'post-detail' x.id %}" class="text-decoration-none text-white">{{ x.title }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

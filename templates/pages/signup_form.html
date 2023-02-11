@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title %}
 Register
@@ -6,23 +7,13 @@ Register
 
 {% block content %}
 
-<style>
-    .helptext {
-        font-weight: lighter;
-    }
-
-    .errorlist {
-        color: red;
-    }
-</style>
-
 <div class="container-fluid d-flex justify-content-center align-items-center" style="min-height: 100vh;">
     <div class="card bg-light p-3" style="width: 60vw;">
         <h1 class="display-6 text-decoration-underline">Register</h1>
 
         <form method="post" class="form my-3 text-left">
             {% csrf_token %}
-            {{ form.as_div }}
+            {{ form | crispy }}
             <button type="submit" class="btn btn-primary px-4 py-2 rounded">Signup!</button>
         </form>
     </div>

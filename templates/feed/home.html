@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Feed
+{% endblock %}
+
+{% block content %}
+<div class="container">
+        <h1 class="display-1 text-center mt-5">Greenery Feed</h1>
+        <div class="container d-flex justify-content-center align-items-center">
+            <a href="{% url 'search_posts' %}" class="btn btn-success px-3 py-1 mx-2">Search</a>
+            <a href="{% url 'post-create' %}" class="btn btn-primary px-3 py-1 mx-2">Create Post</a>
+        </div>
+	    <div class="row py-4">
+	      <div class="col-md-2"></div>
+	      <div class="col-md-8">
+            {% for post in posts %}
+                <div class="container border p-5 bg-light rounded">
+                    <h3 class="display-5">{{ post.title }}</h3>
+                    <br>
+                    <a href="{% url 'post-detail' post.id %}"><strong>Read More...</strong></a>
+                    <br>
+                    <h5>
+                        Written by <a href="{% url 'pages_profile' post.user.username %}">{{ post.user.username }}</a>
+                    </h5>
+                    <br>
+                    {% if post.tags %}
+                        <br>
+                        <p class="text-danger ml-3"><b>Tags: <i>{{ post.tags }}</i></b></p>
+                    {% endif %}
+                    <div class="card-footer">
+                        <button class="btn btn-white mr-3 like" id="{{ post.id }}">
+                            {% if post in liked_post %}
+                                <a href="{% url 'post-like' %}" style="color:red;" id="likebtn{{ post.id }}"> Unlike</a> | <span id="likecount{{ post.id }}">{{post.likes.count}}</span>
+                            {% else %}
+                                <a href="{% url 'post-like' %}" style="color:green;" id="likebtn{{ post.id }}"> Like</a> | <span id="likecount{{ post.id }}">{{post.likes.count}}</span>
+                            {% endif %}
+                        </button>
+                        <a class="btn btn-outline-success" href="{% url 'post-detail' post.id %}">View Comments</a>
+                    </div>
+                </div>
+            {% endfor %}
+	  	   </div>
+	  	   <div class="col-md-2"></div>
+	    </div>
+	</div>
+
+{% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+{% endif %}
+
+<script>
+	$(".like").click(function (e) {
+    var id = this.id;
+    var href = $('.like').find('a').attr('href');
+    e.preventDefault();
+
+    $.ajax({
+        url: href,
+        data: {
+          'likeId': id,
+          'user': {{ user.id }}
+        },
+        success: function(response){
+          if(response.liked){
+            $('#likebtn' + id).html("Unlike");
+            $('#likebtn' + id).css("color", "red");
+            $(`#likecount${id}`).html(response.count);
+          }
+          else{
+            $('#likebtn' + id).html("Like");
+            $('#likebtn' + id).css("color", "green")
+            $(`#likecount${id}`).html(response.count);
+          }
+        }
+      })
+});
+</script>
+
+{% endblock %}
