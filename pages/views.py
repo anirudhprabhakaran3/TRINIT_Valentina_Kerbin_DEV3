@@ -25,7 +25,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=user.username, password=raw_password)
             login(request, user)
-            return redirect('pages_home')
+            return redirect('pages_profile')
     else:
         form = SignUpForm()
     args = {
