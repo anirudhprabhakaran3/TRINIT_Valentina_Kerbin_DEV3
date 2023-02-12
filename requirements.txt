@@ -2,4 +2,9 @@ asgiref==3.6.0
 crispy-bootstrap5==0.7
 Django==4.1.6
 django-crispy-forms==1.14.0
+joblib==1.2.0
+numpy==1.24.2
+scikit-learn==1.2.1
+scipy==1.10.0
 sqlparse==0.4.3
+threadpoolctl==3.1.0

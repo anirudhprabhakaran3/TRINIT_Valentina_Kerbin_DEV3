@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+Recommend
+{% endblock %}
+
+{% block content %}
+    <style>
+        #main {
+            min-height: 40vh;
+        }
+    </style>
+<div class="container d-flex flex-column justify-content-center align-items-center" id="main">
+    <h1 class="display-1">Find your plant buddy.</h1>
+</div>
+
+
+    <div class="container">
+        {% if output is None %}
+            <form method="post">
+                {% csrf_token %}
+                {{ form | crispy }}
+                <button type="submit" class="btn btn-outline-success px-3 py-1">Recommend</button>
+            </form>
+        {% else %}
+            <p>Our system recommends that you grow <strong>{{ output }}</strong>! Look for tips in <a href="{% url 'recipes_home' %}">Recipes</a>.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
